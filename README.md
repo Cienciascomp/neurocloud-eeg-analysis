@@ -1,5 +1,5 @@
 # neurocloud-eeg-analysis
-This project is focused on developing an applicaiton capable of showing graphically and processing EEG data extracted from an EDF (European data format) file.
+This project is focused on developing an applicaiton capable of graphically showing and processing EEG data extracted from an EDF (European data format) file.
 
 ## Necessary dependencies and tools used to build the project
 The application's interface is built on the framework **Dash**, specialized on building dashboards and graphs. It also uses external auxiliary libraries for the frontend, namely, **Dash bootstrap components**.
