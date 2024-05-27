@@ -16,7 +16,7 @@ The file app.py contains the instance of the dash application.
 
 The file index.py launches the application.
 
-The ordinary person may not understand what the file "callbacks.py" stands for. As a short description, it incorporates ways of communicating the frontend and the backend of the application.
+The ordinary person may not understand what the file "callbacks.py" stands for. As a short description, it incorporates ways of communicating the frontend and the backend of the application. Callbacks are a feature from Dash.
 
 The folder "assets" contains the images used on the application.
 
