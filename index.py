@@ -19,7 +19,7 @@ def create_layout():
                 children=[], 
                 style={'display' : 'block', 'justifyContent' : 'center',
                     'minHeight': '100vh',
-                    'minWidth' : '100vw',  # Use minHeight para garantir que o background ocupe no mínimo a altura total da janela
+                    'minWidth' : '100vw', 
                     'background': f'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("data:image/png;base64,{encoded_background_string}") ',
                     'backgroundSize': 'cover'
                 }
@@ -39,7 +39,7 @@ def display_page(pathname):
     elif pathname == '/pagina-3': 
         return home_page(encoded_logo) #coloca a logo aqui
     elif pathname == '/pagina-pacientes':
-        return query_page(encoded_logo)
+        return user_info_page(encoded_logo)
     elif pathname == '/pagina-grafico':
         return graph_page_layout(encoded_logo)
     elif pathname == '/pagina-inserir':

@@ -2,6 +2,7 @@ import mne
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
+
 def create_minimal_raw(eeg_data):
 
     info = mne.create_info(ch_names=eeg_data['ch_names'], sfreq=eeg_data['sfreq'], ch_types='eeg')
@@ -32,7 +33,7 @@ def build_graph_logic(ch_names, data, times):
     for i, channel_name in enumerate(ch_names):
         fig.add_trace(go.Scatter(x=times, y=data[i], mode='lines', name=channel_name), row=i+1, col=1)
 
-    #Atualiza a formatação do texto para cada eixo
+    #Atualiza a formatação do texto para cada eixo e a cor da figura
     for axis in fig.layout:
         if axis.startswith('yaxis') or axis.startswith('xaxis'):
             fig.update_layout({
@@ -51,8 +52,9 @@ def build_overlaped_graph_logic(ch_names, data, times):
     fig = go.Figure()
     for i, channel_name in enumerate(ch_names):
         fig.add_trace(go.Scatter(x=times, y=data[i], mode='lines', name=channel_name))
-    fig.update_layout(title='EEG Data Plot', height=650,   plot_bgcolor='#222', paper_bgcolor='#222', margin=dict(l=30, r=10, t=100, b=15)) #Edita características da figura usada para gerar o gráfico
-    fig.update_xaxes(tickfont=dict(size=12, color='#fff', family='Courier New, monospace'))
+    fig.update_layout( title='EEG Data Plot', height=650, margin=dict(l=30, r=10, t=100, b=15), plot_bgcolor='#fff', paper_bgcolor='#222',  legend=dict(font=dict(color='#fff')) ) #Edita características da figura usada para gerar o gráfico
+    fig.update_xaxes(tickfont=dict(size=12, color='#fff', family='Courier New, monospace'), gridcolor='gray', linecolor='gray')
+    fig.update_yaxes(tickfont=dict(size=12, color='#fff', family='Courier New, monospace'), gridcolor='gray', linecolor='gray')
 
     return fig
 

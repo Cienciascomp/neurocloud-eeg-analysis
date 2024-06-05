@@ -14,7 +14,7 @@ navbar_style = {
     'borderBottomLeftRadius': '30px',
     'borderBottomRightRadius': '20px',
     'color':'#fff',
-    'border': '2px solid #fff'
+    'border': '2px solid #777'
 }
 
 # Definindo o estilo para o conteúdo principal
@@ -23,7 +23,17 @@ main_content_style = {
     'paddingLeft': '55px',
     'paddingRight': '55px',
     'paddingBottom': '23px',
+    'flexGrow': '1',
+}
+
+main_content_info_style = {
+
     'flexGrow': '0',
+    'background': 'linear-gradient(to right, #111, #444)',
+    'borderRadius': '20px',
+    'padding': '30px',
+    'margin': '10px'
+    
 }
 
 link_style = {
@@ -68,7 +78,7 @@ footer_style = {
     'position': 'relative',  # ou 'fixed' se você quiser que o footer fique sempre visível
     'bottom': '0',  # Se position for 'fixed', isso colocará o footer na parte inferior
     'borderTopLeftRadius':'30px',
-    'border': '2px solid #fff'
+    'border': '2px solid #777'
 }
 
 column_style = {
@@ -87,3 +97,9 @@ bottom_line_style = {
     'margin':'20px auto',
     'bottom':'0'
   } 
+
+carousel_image_style = {
+    "width": "100%",
+    "height": "500px",
+    "objectFit": "cover"
+}

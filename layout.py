@@ -1,7 +1,8 @@
 from dash import html, dcc, dash_table
-from app import *
 from styles import *
-
+import dash_bootstrap_components as dbc
+from model import User
+from app import app
 
 
 
@@ -89,6 +90,27 @@ def create_modal(modal_id, confirm_button_id, close_id, header_text, body_text, 
             )
 
 
+def create_warning_modal(modal_id,  header_text, body_text):
+
+    return dbc.Modal(
+                [   html.Div([
+                    dbc.ModalHeader(dbc.ModalTitle(header_text), style={'background': 'linear-gradient(to right, #111, #555)', 'color': '#fff'}),
+                    dbc.ModalBody(
+                                    body_text,
+                                    style={'background': 'linear-gradient(to right, #111, #555)', 'color': '#fff'}
+                                ),
+                    dbc.ModalFooter(
+                        [
+                            
+                        ], style={'background': 'linear-gradient(to right, #111, #555)', 'color': '#000'}
+                    ),
+                    ], style={'border': '2px solid #fff', 'borderRadius': '8px'})
+                ],
+                id=modal_id,
+                is_open=False,  # Inicialmente fechado
+            )
+
+
 
 
 
@@ -119,7 +141,6 @@ def create_navbar():
 
 
 
-
 def create_social_link(href, icon_class, text):
     return html.A(
         dbc.Button(
@@ -131,7 +152,6 @@ def create_social_link(href, icon_class, text):
         target="_blank",
         style=link_style
     )
-
 
 
 
@@ -198,6 +218,7 @@ def create_footer(encoded_logo = None):
 
 
 
+
 # Função para criar a Home Page
 def home_page(encoded_logo = None):
 
@@ -205,51 +226,52 @@ def home_page(encoded_logo = None):
     footer = create_footer(encoded_logo)
 
 
-    plot_card = dbc.Card(
-        [
-            dbc.CardImg(
-                src="/assets/ExamplePlot.png",
-                top=True,
-                style={"opacity": 1.0},
-            ),
-            dbc.CardImgOverlay(
-               
-            ),  
-        ],
-        style={"width": "26rem", 'height': '80 rem', 'border': '4px solid #fff', 'borderRadius': '10px'},
+    carousel = dbc.Carousel(
+    items=[
+        {
+            "key": "1",
+            "src": "/assets/eletroencefalograma2.png",
+            "header": "Modelo de Exame ",
+            "caption": "Saiba como se tornar um técnico de eletroencefalograma",
+            "img_style": carousel_image_style
+        },
+        {
+            "key": "2",
+            "src": "/assets/eletroencefalograma.png",
+            "header": "Montagem de eletrodos",
+            "caption": "Entenda como organizar os eletrodos para extrair o máximo do seu equipamento",
+            "img_style": carousel_image_style
+ 
+        },
+        {
+            "key": "3",
+            "src": "/assets/CardNeurocloud.png",
+            "header": "Descobertas sobre o cérebro",
+            "caption": "Saiba das descobertas mais recentes sobre a plasticidade cerebral",
+            "img_style": carousel_image_style
+ 
+        },
+    ],
+    controls=True,
+    indicators=True,
+    interval=3600,  #Delay em milissegundos
+    variant="dark"
     )
-
-    neuro_card = dbc.Card(
-        [
-            dbc.CardImg(src="/assets/CardNeurocloud.png", top=True, style={"opacity": 0.9,  'maxHeight': '175px'}),
-            dbc.CardBody(
-                [
-                    html.H4("EEG", className="card-title"),
-                    html.P(
-                        "O que é análise de eletroencefalograma?",
-                        className="card-text",
-                    ),
-                    dbc.Button("Conheça a análise EEG", style={'backgroundColor': '#222', 'border': '2px solid #fff'}),
-                ], style={'background': 'linear-gradient(to right, #111, #555)', 'color': '#fff'}
-            ),
-        ],
-        style={"width": "18rem", 'border': '4px solid #fff', 'borderRadius': '10px'},
-    )
-
 
     main_content = html.Div([
         html.H1('Home', style={'textAlign': 'left', 'color': 'white'}),
         html.Br(),
 
         html.Div([
+
             html.Div([
-                html.P('Nosso objetivo é fornecer ferramentas avançadas e acessíveis para a análise precisa do EEG, ajudando médicos, pesquisadores e profissionais da saúde a entender melhor a atividade cerebral e fornecer tratamentos mais eficazes para uma variedade de condições neurológicas.', style={'text-align': 'justify', 'marginLeft': '20px', 'color': 'white'}),
-                html.Br(),
-                neuro_card
+                html.P('Nosso objetivo é fornecer ferramentas avançadas e acessíveis para a análise precisa do EEG, ajudando médicos, pesquisadores e profissionais da saúde a entender melhor a atividade cerebral e fornecer tratamentos mais eficazes para uma variedade de condições neurológicas.', style={'textAlign': 'justify', 'marginLeft': '20px', 'color': 'white', 'fontSize': '30px'}),
             ], style={'flex': '2', 'paddingRight': '60px'}),
+
             html.Div([
-                plot_card
+                dbc.Container(fluid=True, children=[carousel])
             ], style={'flex': '1'})
+
         ], style={'display': 'flex'}),
     ], style=main_content_style)
 
@@ -277,10 +299,14 @@ def insert_page(encoded_logo = None):
             html.Label('Título da Consulta:', style={'color': 'white'}),
             dcc.Input(id='titulo-consulta', type='text', style=input_insert_page_style),
             html.Br(),
+            html.Label('Tipo Exame:', style={'color': 'white'}),
+            dcc.Input(id='tipo-exame', type='text', style=input_insert_page_style),
+            html.Br(),
             html.Label('Número do Protocolo:', style={'color': 'white'}),
             dcc.Input(id='numero-protocolo', type='text', style=input_insert_page_style),
             html.Br(),
             html.Label('Data:', style={'color': 'white'}),
+            html.Br(),
             dcc.Input(id='data-consulta', type='text', style=input_insert_page_style),
             html.Label('Carregar Arquivo:', style={'color': 'white'}),
             dcc.Upload(id='upload-arquivo', children=html.Div(['Arraste e solte ou ', html.A('Selecione os arqiuvos')]), style={
@@ -298,7 +324,7 @@ def insert_page(encoded_logo = None):
             dbc.Button('Inserir', id='inserir-dados', n_clicks=0, style={'background': '#111', 'border': '1px solid #fff'}),
             dbc.Button('Limpar', id='limpar-campos', n_clicks=0, style={'background': '#111', 'border': '1px solid #fff', 'marginLeft': '7px'}),
             html.Div(id='mensagem-insercao', style={'marginTop': '10px', 'color': 'white'})
-        ], style={'maxWidth': '500px', 'maxHeight': '500px', 'margin': 'auto'})
+        ], style={'maxWidth': '700px', 'maxHeight': '900px', 'margin': 'auto'})
     ], style=main_content_style)
 
     return html.Div([
@@ -306,57 +332,77 @@ def insert_page(encoded_logo = None):
             navbar,
             main_content,
             footer
-        ], style={'display': 'flex', 'flexDirection': 'column', 'height': '100vh', 'backgroundColor': 'transparent', 'flexGrow':'1', 'border': 'none'})
-    ], style={'display': 'flex', 'flexDirection': 'column', 'height': '100vh'})
+        ], style={'display': 'flex', 'flexDirection': 'column', 'backgroundColor': 'transparent', 'flexGrow':'1', 'border': 'none'})
+    ], style={'display': 'flex', 'flexDirection': 'column'})
 
 
-def query_page(encoded_logo = None):
+
+def table_layout(dados):
+
+    return html.Div([
+
+                html.Div(
+                    dash_table.DataTable(
+                        id='table',
+                        columns=[
+                            {"name": "nro do protocolo", "id": "protocolo"},
+                            {"name": "Paciente", "id": "nomePaciente"},
+                            {"name": "Título da consulta", "id": "titulo"},
+                            {"name": "Tipo da consulta", "id": "tipoConsulta"},
+                            {"name": "data", "id": "data", "presentation": "markdown"}
+                        ],
+                        data=dados,
+                        style_cell={'textAlign': 'left', 'padding': '10px', 'color': '#fff', 'backgroundColor': '#000', 'border': '1px solid #fff'},
+                        style_header={
+                            'backgroundColor': '#000',
+                            'fontWeight': 'bold',
+                            'border': '1px solid #fff'
+                        },
+                        style_data={
+                            'border': '1px solid #fff'
+                        },
+                        style_table={'borderRadius': '15px', 'overflow': 'hidden', 'border': '2px solid #fff', 'width': '200px'},
+                        markdown_options={"html": True}
+                    )
+                )
+            ], style={'maxWidth': '800px', 'margin': 'auto'}
+            )
+
+
+def generate_data_table():
+
+    with app.server.app_context():  # Use o contexto da aplicação
+        users = User.query.all() 
+
+        dados = [
+            {
+                'nro do protocolo': user.id,
+                'Paciente': user.nomeConsulta,
+                'Título da consulta': user.data.strftime("%Y-%m-%d") if user.data else None,  # Formatando data
+                'Tipo da consulta': user.nomePaciente,
+                'expandir': f'[🔍]'  # Exemplo de como você poderia gerar um link de download
+            } for user in users
+        ]
+
+        user_list = table_layout(dados)
+
+        return user_list
+
+
+
+def query_page(encoded_logo = None, dados=None):
     navbar = create_navbar()
     footer = create_footer(encoded_logo)
 
     list = ['number1','number2', 'number3' ]
-    dados = [
-    {"id": 1, "nomeConsulta": "falta de atenção", "data": "12/01/2023", "nomePaciente": "Sebastian Bach", "arquivo": "arquivo1.pdf"},
-    {"id": 2, "nomeConsulta": "análise autismo", "data": "01/12/2024", "nomePaciente": "André Marques", "arquivo": "arquivo2.pdf"},
-    {"id": 3, "nomeConsulta": "análise tdah", "data": "07/04/2023", "nomePaciente": "Albert Einstein", "arquivo": "arquivo3.pdf"}
-]
+
+    table = generate_data_table()
 
     main_content = html.Div([
-                        html.H1('Listar pacientes e consultas cadastradas', style={'textAlign': 'left', 'color': 'white'}),
+                        
                         html.Br(),
-
-                        html.Div([
-
-                            html.Div(
-                                dash_table.DataTable(
-                                    id='table',
-                                    columns=[
-                                        {"name": "ID", "id": "id"},
-                                        {"name": "Titulo da consulta", "id": "nomeConsulta"},
-                                        {"name": "data", "id": "data"},
-                                        {"name": "Nome", "id": "nomePaciente"},
-                                        {"name": "Arquivo", "id": "arquivo", "presentation": "markdown"}
-                                    ],
-                                    data=dados,
-                                    style_cell={'textAlign': 'left', 'padding': '5px', 'color': '#fff', 'backgroundColor': '#000', 'border': '1px solid #fff'},
-                                    style_header={
-                                        'backgroundColor': '#000',
-                                        'fontWeight': 'bold',
-                                        'border': '1px solid #fff'
-                                    },
-                                    style_data={
-                                        'border': '1px solid #fff'
-                                    },
-                                    style_table={'borderRadius': '15px', 'overflow': 'hidden', 'border': '2px solid #fff'},
-                                    markdown_options={"html": True}
-                                )
-                            ),
-
-                            html.Br(),
-                            dbc.Button('Inserir', id='listar-consultas', n_clicks=0, style={'background': '#111', 'border': 'none'}),
-                            dbc.Button('Limpar', id='lstar-pacientes', n_clicks=0, style={'background': '#111',  'border': 'none', 'marginLeft': '7px'})
-                            
-                        ], style={'maxWidth': '800px', 'margin': 'auto'})
+                        table                    
+                        
                     ], style=main_content_style)
 
     return html.Div([
@@ -369,15 +415,172 @@ def query_page(encoded_logo = None):
 
 
 
+def user_info_page(encoded_logo = None, dados=None):
+    navbar = create_navbar()
+    footer = create_footer(encoded_logo)
+
+    dados = {
+        "id": 123,
+        "nome": "John Doe",
+        "genero": "Masculino",
+        "cpf": "123.456.789-00",
+        "telefone": "(12) 3456-7890",
+        "email": "johndoe@example.com",
+        "descricao": "Uma descrição mais extensa do histórico do paciente.",
+        "diagnostico": "Detalhes do diagnóstico."
+    }
+
+    graph_layout = build_graph_inside_form()
+
+    main_content = html.Div([
+        html.H1('Detalhes do Paciente', style={'textAlign': 'center', 'color': '#fff'}),
+        dbc.Card(
+            [
+                dbc.CardBody([
+                    html.H4('Informações Básicas', className='card-title', style={'color': '#fff'}),
+                    
+                    html.Div([
+                    html.Div([
+                        html.P(f"ID: {dados['id']}"),
+                        html.P(f"Nome: {dados['nome']}")
+                    ], style={'display': 'flex', 'flexDirection': 'Column', 'flex': '1'}),
+                    
+                    html.Div([
+                        html.P(f"Gênero: {dados['genero']}"),
+                        html.P(f"CPF: {dados['cpf']}")
+                    ], style={'display': 'flex', 'flexDirection': 'Column', 'flex': '1'}),
+
+                    html.Div([
+                        html.P(f"Telefone: {dados['telefone']}"),
+                        html.P(f"Email: {dados['email']}")
+                    ], style={'display': 'flex', 'flexDirection': 'Column', 'flex': '1'}),
+                    ], style={'display': 'flex', 'flexDirection': 'row'}),
+
+                    html.Br(),
+
+                    html.H4('Descrição', className='card-title'),
+                    html.P(dados['descricao']),
+                    html.Br(),
+                    html.H4('Diagnóstico', className='card-title'),
+                    html.P(dados['diagnostico']),
+
+                    graph_layout
+                    
+                ], style=main_content_info_style)
+
+
+            ],
+            style={'margin': '20px', 'borderRadius': '15px', 'padding': '20px', 'background': 'linear-gradient(to right, #000, #555)', 'border': '2px solid #777', 'color': '#fff'}
+        ),
+        
+        dbc.Button(
+                         [
+                             html.I(className="fa-solid fa-arrow-left", style={'marginTop': '4px'}), 
+                             html.P("Voltar", style={'marginLeft': '9px'})
+                         ],
+                             id='voltar',
+                             n_clicks=0,
+                             href='/pagina-pacientes',
+                             style={'backgroundColor': '#111', 'border': '2px solid #777', 'display': 'flex', 'width': '100px' , 'height': '40px', 'marginLeft': '18px'}),
+
+
+    ], style={'padding': '20px'})
+
+    return html.Div([
+        html.Div([
+            navbar,
+            main_content,
+            footer
+        ], style={'display': 'flex', 'flexDirection': 'column', 'backgroundColor': 'transparent', 'flexGrow':'1', 'border': 'none'})
+    ], style={'display': 'flex', 'flexDirection': 'column'})
 
 
 
+def build_graph_inside_form():
+
+    warning_modal = create_warning_modal('montage-modal-warning', 'Espere!', 'Selecione uma opção de montagem antes de interpolar os canais')
+    main_content =  html.Div([
+                    
+                        dcc.Upload(
+                            id='upload-data',
+                            children=html.Button('Upload File'),
+                            multiple=False
+                        ),
+                        
+
+                        html.Div([
+
+                            dcc.Dropdown(
+                                id='graph-layout-dropdown',
+                                options=[{'label': 'Canais individuais', 'value': '0'},
+                                        {'label': 'Canais sobrepostos', 'value': '1'},
+                                ],
+                                placeholder='Disposição dos canais',
+                                value='0',
+                                style={'flex': '2', 'justifyContent': 'left', 'width':'225px', 'color': '#000'}
+                            ),
+
+                            
+                            html.Label('Filtro passa-baixa:', style={'color':'#fff'}),
+                            dcc.Input(id='low-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
+                        
+
+                        ], style={'display': 'flex', 'alignItems': 'center', 'marginTop': '10px'}),
+
+                    
+
+                        html.Div([
+
+                            dcc.Dropdown(
+                                    id='montage-dropdown',
+                                    options=[{'label': 'padrão 10-05', 'value': 'standard_1005'},
+                                            {'label': 'padrão 10-20', 'value': 'standard_1020'},
+                                            {'label': 'padrão 10-20 pós-fixado', 'value': 'standard_postfixed'},
+                                            {'label': 'padrão 10-20 prefixado', 'value': 'standard_prefixed'},
+                                            {'label': 'padrão easycap M1', 'value': 'easycap-M1'},
+                                            {'label': 'padrão easycap M10', 'value': 'easycap-M10'}
+                                    ],
+                                    placeholder='Selecione uma opção de montagem',
+                                    style={'flex': '2', 'justifyContent': 'left', 'width':'300px', 'color': '#000'}
+                            ),
+
+                            html.Label('Filtro passa-alta:', style={'color':'#fff'}),
+                            dcc.Input(id='high-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
+                        
+
+                        ], style={'display': 'flex', 'alignItems': 'center', 'marginTop': '10px'}),
 
 
+                        html.Div([
+                            html.Div([
+                                html.Button(
+                                    id='ica-button',
+                                    children='Plotar ICA',
+                                    type='button',
+                                    style={ 'font-family': 'Times New Roman'}
+                                )
+                            ], style={'display': 'flex', 'justifyContent': 'flex-start', } ),
+                            
+                            html.Div([
+                                html.Button('Filtrar frequências', id='submit-filter', n_clicks=0)
+                            ], style={'display': 'flex', 'justifyContent': 'flex-end'})
 
-def graph_external_layout():
+                        ], style={'marginBottom': '10px', 'marginTop': '10px', 'display': 'flex', 'justifyContent': 'space-between', 'flexDirection': 'row'}),        
+                       
 
-    return html.Div()
+                        html.Div(
+                            id='eeg-graph-div',
+                            children=[html.Div( style={'marginTop': '135px'})],
+                            
+                        ),
+
+                        dcc.Store(id='eeg-store')  # Armazena os dados do EEG
+                    ], style={ 'display': 'block', 'padding': '30px' }) #block foi responsável por resolver o problema da largura do gráfico
+                
+    return html.Div([main_content,
+                    warning_modal
+                    ])
+
 
 
 
@@ -398,20 +601,20 @@ def graph_page_layout(encoded_logo = None):
 
                         html.Div([
 
-                             dcc.Dropdown(
+                            dcc.Dropdown(
                                 id='graph-layout-dropdown',
                                 options=[{'label': 'Canais individuais', 'value': '0'},
                                         {'label': 'Canais sobrepostos', 'value': '1'},
                                 ],
                                 placeholder='Disposição dos canais',
                                 value='0',
-                                style={'flex': '2', 'justifyContent': 'left', 'width':'225px'}
+                                style={'flex': '2', 'justifyContent': 'left', 'width':'225px', 'color': '#000'}
                             ),
 
                             
-                                html.Label('Filtro passa-baixa:', style={'color':'#fff'}),
-                                dcc.Input(id='low-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
-                           
+                            html.Label('Filtro passa-baixa:', style={'color':'#fff'}),
+                            dcc.Input(id='low-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
+                        
 
                         ], style={'display': 'flex', 'alignItems': 'center', 'marginTop': '10px'}),
 
@@ -432,9 +635,9 @@ def graph_page_layout(encoded_logo = None):
                                     style={'flex': '2', 'justifyContent': 'left', 'width':'300px'}
                             ),
 
-                                html.Label('Filtro passa-alta:', style={'color':'#fff'}),
-                                dcc.Input(id='high-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
-                            
+                            html.Label('Filtro passa-alta:', style={'color':'#fff'}),
+                            dcc.Input(id='high-pass-input', value='', type='text', style={'borderRadius': '6px', 'maxHeight': '5vh'})
+                        
 
                         ], style={'display': 'flex', 'alignItems': 'center', 'marginTop': '10px'}),
 
@@ -474,7 +677,7 @@ def graph_page_layout(encoded_logo = None):
 
 
 def build_graph_layout(ch_names, fig):
-
+    warning_modal = create_warning_modal('montage-modal-warning', 'Espere!', 'Selecione uma opção de montagem antes de interpolar os canais')
     checklist = dcc.Checklist(
         id='channels-checklist',
         options=[{'label': channel, 'value': channel} for channel in ch_names],
@@ -503,7 +706,7 @@ def build_graph_layout(ch_names, fig):
         html.Div([
             dcc.Graph(id='eeg-graph', figure=fig, config={'scrollZoom': True}, style={'flex': '3', 'width': '80%'}),
             html.Div(
-                [checklist],
+                [checklist, warning_modal],
                 style={'marginTop': '125px', 'marginRight':'20px'}
             ),
         ],
@@ -513,7 +716,7 @@ def build_graph_layout(ch_names, fig):
 
 
 def build_overlaped_graph_layout(ch_names, fig):
-
+    warning_modal = create_warning_modal('montage-modal-warning', 'Espere!', 'Selecione uma opção de montagem antes de interpolar os canais')
     checklist = dcc.Checklist(
         id='channels-checklist',
         options=[{'label': channel, 'value': channel} for channel in ch_names],
@@ -541,7 +744,7 @@ def build_overlaped_graph_layout(ch_names, fig):
         html.Div([
             dcc.Graph(id='eeg-graph', figure=fig, config={'scrollZoom': True}, style={'flex': '3', 'width': '85%'}),
                 html.Div(
-                    [checklist],
+                    [checklist, warning_modal],
                     style={'marginTop': '125px', 'marginRight':'20px'}
                 ),
         ],
