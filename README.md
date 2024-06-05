@@ -4,7 +4,7 @@ This project is focused on developing an applicaiton capable of presenting and p
 ## Necessary dependencies and tools used to build the project
 The application's interface is built on the framework **Dash**, specialized on building dashboards and graphs. It also uses external auxiliary libraries for the frontend, namely, **Dash bootstrap components**.
 Moreover, the library **MNE-Python** is used for dealing with the EEG data analysis and EDF file.
-**SQLAlchemy** and **MySQL** were choosen as the tools for developing the newly-implemented database. By 27/05/2024 the database is still under development.
+**SQLAlchemy** and **MySQL** were choosen as the tools for developing the newly-implemented database. By 06/05/2024 the database is still under development.
 
 ## Logic separation of the files.
 
@@ -26,3 +26,7 @@ The file "logic.py" contains functions that are not necessarilly bound to callba
 
 The file "styles.py" contains a collection of python dictionaries for styling the app.
 
+
+## Running the application
+
+To run the application the user needs to download all of the files and execute then from the **index.py** file. the login is there for dummy purpouses and it can be entered using "user" and "senha" as username and password.
